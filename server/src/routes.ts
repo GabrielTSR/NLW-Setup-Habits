@@ -54,4 +54,67 @@ export async function appRoutes(app: FastifyInstance) {
         )
         return { possibleHabits, completedHabits }
     })
+
+    //completar / não completar um hábito
+    app.patch('/habits/:id/toggle', async (request) => {
+        const toggleHabitParams = z.object({
+            id: z.string().uuid(),
+        })
+        const { id } = toggleHabitParams.parse(request.params)
+        const today = dayjs().startOf('day').toDate()
+        let day = await prisma.day.findUnique({
+            where: { date: today },
+        })
+        if (!day) {
+            day = await prisma.day.create({
+                data: { date: today },
+            })
+        }
+        const dayHabit = await prisma.dayHabit.findUnique({
+            where: {
+                day_id_habit_id: {
+                    day_id: day.id,
+                    habit_id: id,
+                },
+            },
+        })
+        if (dayHabit) {
+            //remover a marcação de completo
+            return await prisma.dayHabit.delete({
+                where: {
+                    id: dayHabit.id,
+                },
+            })
+        }
+        //Completar o hábito
+        return await prisma.dayHabit.create({
+            data: { day_id: day.id, habit_id: id },
+        })
+    })
+
+    app.get('/summary', async (request) => {
+        const summary = await prisma.$queryRaw`
+            SELECT 
+                days.id, 
+                days.date,
+                (
+                    SELECT 
+                        cast(count(*) as float) 
+                    FROM day_habits
+                    WHERE day_habits.day_id = days.id
+                ) as completed,
+                (
+                    SELECT 
+                        cast(count(*) as float) 
+                    FROM habit_week_days
+                    JOIN habits
+                        ON habits.id = habit_week_days.habit_id
+                    WHERE
+                        habit_week_days.week_day = cast(strftime('%w', days.date/1000, 'unixepoch') as int)
+                        AND habits.created_at <= days.date
+                ) as amount
+            FROM days
+        `
+        return summary
+    })
 }

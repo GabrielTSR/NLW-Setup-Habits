@@ -1,3 +1,4 @@
+import './lib/day-js'
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { appRoutes } from './routes'
