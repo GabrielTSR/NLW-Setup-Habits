@@ -15,7 +15,7 @@ export function SummaryTable() {
                     return (
                         <div
                             key={weekDay}
-                            className="text-zinc-400 text-xl h10 w-10 font-bold flex items-center justify-center"
+                            className="text-zinc-400 text-xl h10 w-16 font-bold flex items-center justify-center"
                         >
                             {weekDay}
                         </div>
