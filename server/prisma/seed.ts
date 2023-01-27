@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-const firstHabitId = 'sdaf6as7dcft7a6sdtf7a6sdtf7asdt6f7asd6ctfasd'
+const firstHabitId = '38839aa0-9e53-11ed-a8fc-0242ac120002'
 const firstHabitCreationDate = new Date('2022-12-31')
 
-const secondHabitId = 'df6tasd7ftdas76fta7sdf6asdfas8d6f6'
+const secondHabitId = '38839de8-9e53-11ed-a8fc-0242ac120002'
 const secondHabitCreationDate = new Date('2023-01-03')
 
-const thirdHabitId = 'f6a5sd4f6d5as4f3sad1f65asdf7f1a6sd5f1asd6f54sd'
+const thirdHabitId = '3883a3c4-9e53-11ed-a8fc-0242ac120002'
 const thirdHabitCreationDate = new Date('2023-01-08')
 
 async function main() {
