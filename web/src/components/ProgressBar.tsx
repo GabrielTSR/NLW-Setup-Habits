@@ -12,7 +12,7 @@ export function ProgressBar({ progress }: ProgressBarProps) {
                 role="progressbar"
                 aria-label="Habit progress in this day"
                 aria-valuenow={progress}
-                className="h-3 rounded-xl bg-violet-600 w-3/4"
+                className="h-3 rounded-xl bg-violet-600 w-3/4 transition-all"
                 style={progressStyles}
             />
         </div>

@@ -4,7 +4,7 @@ import { api } from '../lib/axios'
 import { generateDatesFromYearBeginning } from '../utils/generate-dates-from-year-beginning'
 import { HabitDay } from './HabitDay'
 
-const weekDays = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D']
+const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
 
 const summaryDates = generateDatesFromYearBeginning()
 const minimumSummaryDatesSize = 18 * 7 // 18 weeks
@@ -29,9 +29,9 @@ export function SummaryTable() {
     return (
         <div className="w-full flex">
             <div className="grid grid-rows-7 grid-flow-row gap-3">
-                {weekDays.map((weekDay) => (
+                {weekDays.map((weekDay, i) => (
                     <div
-                        key={weekDay}
+                        key={`${weekDay}${i}`}
                         className="text-zinc-400 text-xl h10 w-16 font-bold flex items-center justify-center"
                     >
                         {weekDay}
@@ -39,19 +39,20 @@ export function SummaryTable() {
                 ))}
             </div>
             <div className="grid grid-rows-7 grid-flow-col gap-3">
-                {summaryDates.map((date) => {
-                    const dayInSummary = summary.find((day) => {
-                        return dayjs(date).isSame(day.date, 'day')
-                    })
-                    return (
-                        <HabitDay
-                            key={date.toString()}
-                            date={date}
-                            amount={dayInSummary?.amount}
-                            completed={dayInSummary?.completed}
-                        />
-                    )
-                })}
+                {summary.length > 0 &&
+                    summaryDates.map((date) => {
+                        const dayInSummary = summary.find((day) => {
+                            return dayjs(date).isSame(day.date, 'day')
+                        })
+                        return (
+                            <HabitDay
+                                key={date.toString()}
+                                date={date}
+                                amount={dayInSummary?.amount}
+                                defaultCompleted={dayInSummary?.completed}
+                            />
+                        )
+                    })}
                 {amountOfDaysToFill > 0 &&
                     Array.from({ length: amountOfDaysToFill }).map((_, i) => (
                         <div
